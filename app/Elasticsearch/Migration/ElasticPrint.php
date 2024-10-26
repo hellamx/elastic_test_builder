@@ -183,6 +183,7 @@ class ElasticPrint
 
     /**
      * Set boolean mapping
+     *
      * @param string $name
      * @param bool $doc_values
      * @param bool $index
@@ -221,6 +222,30 @@ class ElasticPrint
         ];
     }
 
+    /**
+     * Set keyword mapping
+     *
+     * @param string $name
+     * @param bool $doc_values
+     * @param $eager_global_ordinals
+     * @param array|null $fields
+     * @param int $ignore_above
+     * @param bool $index
+     * @param string $index_options
+     * @param array|null $meta
+     * @param bool $norms
+     * @param bool $null_value
+     * @param string $on_script_error
+     * @param string|null $script
+     * @param bool $store
+     * @param string $similarity
+     * @param string|null $normalizer
+     * @param bool $split_queries_on_whitespace
+     * @param string|bool $time_series_dimension
+     * @return void
+     *
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/keyword.html
+     */
     public function setKeyword(
         string $name,
         bool $doc_values = true,
@@ -239,7 +264,7 @@ class ElasticPrint
         ?string $normalizer = null,
         bool $split_queries_on_whitespace = false,
         string|bool $time_series_dimension = false,
-    )
+    ): void
     {
         $this->keywords[] = [
             'name' => $name,
