@@ -1,0 +1,73 @@
+name: elastic_php_builder
+
+services:
+    nginx:
+        build:
+            context: .
+            dockerfile: docker-compose/nginx/Dockerfile
+        volumes:
+            - ./:/var/www/
+            - ./docker-compose/nginx/conf.d:/etc/nginx/conf.d
+        ports:
+            - "8083:80"
+        depends_on:
+            - php
+            - mysql
+
+    php:
+        build:
+            context: .
+            dockerfile: docker-compose/php/Dockerfile
+            args:
+                localUid: 1000
+                localGid: 1000
+                localUser: ${DOCKER_USER}
+        volumes:
+            - ./:/var/www
+
+    mysql:
+        image: mysql:8.0
+        restart: always
+        volumes:
+            - ./tmp/db:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: dev
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - "8081:3306"
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+            PMA_HOST: mysql
+            MYSQL_ROOT_PASSWORD: root
+            UPLOAD_LIMIT: 300M
+        depends_on:
+            - mysql
+        ports:
+            - "8082:80"
+
+    elasticsearch:
+        image: elasticsearch:7.17.24
+        container_name: elasticsearch
+        volumes:
+            - ./docker-compose/elasticsearch/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml
+        ports:
+            - "9200:9200"
+        restart: always
+        environment:
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+            - discovery.type=single-node
+            - xpack.security.enabled=false
+
+    kibana:
+        image: kibana:7.17.24
+        container_name: kibana
+        restart: always
+        ports:
+            - '5601:5601'
+        environment:
+            - ELASTICSEARCH_URL=http://elasticsearch:9200
+        depends_on:
+            - elasticsearch
