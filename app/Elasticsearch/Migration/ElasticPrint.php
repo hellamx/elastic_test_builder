@@ -227,7 +227,7 @@ class ElasticPrint
      *
      * @param string $name
      * @param bool $doc_values
-     * @param $eager_global_ordinals
+     * @param bool $eager_global_ordinals
      * @param array|null $fields
      * @param int $ignore_above
      * @param bool $index
@@ -247,19 +247,19 @@ class ElasticPrint
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/keyword.html
      */
     public function setKeyword(
-        string $name,
-        bool $doc_values = true,
-        $eager_global_ordinals = false,
-        ?array $fields = null,
-        int $ignore_above = 2147483647,
-        bool $index = true,
-        string $index_options = 'docs',
-        ?array $meta = null,
-        bool $norms = false,
-        bool $null_value = true,
-        string $on_script_error = 'fail',
+        string  $name,
+        bool    $doc_values = true,
+        bool    $eager_global_ordinals = false,
+        ?array  $fields = null,
+        int     $ignore_above = 2147483647,
+        bool    $index = true,
+        string  $index_options = 'docs',
+        ?array  $meta = null,
+        bool    $norms = false,
+        bool    $null_value = true,
+        string  $on_script_error = 'fail',
         ?string $script = null,
-        bool $store = false,
+        bool    $store = false,
         string $similarity = 'BM25',
         ?string $normalizer = null,
         bool $split_queries_on_whitespace = false,
